@@ -1,12 +1,14 @@
 name: build-x86-64-immortalwrt-24.10
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:    # 保留手动触发选项
     inputs:
       profile:
         description: '请输入要编译固件大小 单位(MB)'
         required: true
         default: '1024'
+  schedule:
+    - cron: '0 17 * * *'    # UTC 17:00 对应北京时间 01:00
 
 jobs:
   build:
@@ -21,7 +23,8 @@ jobs:
 
       - name: Build ImmortalWrt-x86-64-eif
         run: |
-          profiles="${{ github.event.inputs.profile }}"
+          # 如果是通过schedule触发，使用默认值1024
+          profiles="${{ github.event.inputs.profile || '1024' }}"
           
           IFS=',' read -r -a profile_array <<< "$profiles"
           
@@ -37,7 +40,6 @@ jobs:
               -e PROFILE=$profile \
               immortalwrt/imagebuilder:x86-64-openwrt-24.10.0-rc3 /bin/bash /home/build/immortalwrt/build.sh
           done
-
 
       - name: Create GitHub Release Info
         uses: softprops/action-gh-release@v2.1.0
@@ -58,4 +60,3 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
