@@ -15,8 +15,11 @@ on:
         default: '1024'
 
 
-  watch:
-   types: started
+  #watch:
+   #types: started
+
+  schedule:
+    - cron: '0 16 * * *'    # UTC 16:00 对应北京时间 00:00   
 
 jobs:
   build:
