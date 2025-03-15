@@ -7,8 +7,8 @@ on:
         description: '请输入要编译固件大小 单位(MB)'
         required: true
         default: '1024'
-  schedule:
-    - cron: '0 16 * * *'    # UTC 16:00 对应北京时间 00:00
+  #schedule:
+    #- cron: '0 16 * * *'    # UTC 16:00 对应北京时间 00:00
 
 jobs:
   build:
